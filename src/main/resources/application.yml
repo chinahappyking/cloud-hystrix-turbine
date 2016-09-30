@@ -1,0 +1,28 @@
+---
+server:
+  port: 8989
+
+spring:
+  application:
+    name: turbine
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://peer1:8761/eureka/
+
+# 首先打开http://turbineserver/hystrix，然后再界面上输入http://turbineserver/turbine.stream?cluster=[CLUSTERNAME]
+turbine:
+  aggregator:
+    # 属于同一个cluster的service的断路器信息会在同一个监控页面上显示
+    clusterConfig: pipa
+  # 定义要监控的service的id
+  appConfig: simple-ui,user-service
+  # 特殊的default名称，这样监控页面上不用输入?cluter=[CLUSTERNAME]参数
+  #clusterNameExpression: "'default'"
+  # 从各个service的元数据中获取自定义元数据turbineCluster的值，值相同的service会被归类到同一个turbine的cluster（turbine.aggregator.clusterConfig中定义的列表）
+  clusterNameExpression: metadata['turbineCluster']
