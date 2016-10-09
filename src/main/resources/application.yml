@@ -4,7 +4,9 @@ server:
 
 spring:
   application:
-    name: turbine
+    name: @project.name@
+
+info.version: @project.version@
 
 eureka:
   instance:
